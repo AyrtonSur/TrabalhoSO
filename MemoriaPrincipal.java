@@ -6,7 +6,7 @@ class MemoriaPrincipal {
     private final int memoriaTotal = 32000;
     private int memoriaDisponivel;
     private Map<Integer,Integer> alocacao; //considerando que id é int porque imagino que vai ser gerado por incremento 
-
+    // o ideal é fazer um map de processo com int, e fazer os metodos com objeto processo tbm, porem como nao tem processo ainda ele vai ficar dando pal
     public MemoriaPrincipal(){
         this.memoriaDisponivel = memoriaTotal;
         this.alocacao = new HashMap<>();
@@ -14,6 +14,10 @@ class MemoriaPrincipal {
 
     public int getMemoriaDisponivel() {
         return memoriaDisponivel;
+    }
+
+    public Map<Integer, Integer> getAlocacao() {
+        return alocacao;
     }
 
     public synchronized void alocarMemoria(int idProcesso, int tamanho) {
@@ -43,5 +47,4 @@ class MemoriaPrincipal {
         
         return sb.toString();
     }
-    
 }
