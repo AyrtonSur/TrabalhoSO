@@ -1,10 +1,10 @@
 import java.util.Collection;
 
 public class Processo {
-    private static int idCounter = 0;
-    private int id;
-    private String [] transicaoDeEstados;
-    private String faseAtual;
+    private static int idCounter = 0; /* contador estático que define id */
+    private int id; /* recebe id  do idCounter */
+    private String [] transicaoDeEstados; /* Array que contem: [estadoAtual, estadoNovo] */
+    private String faseAtual; /* Define se está na fase CPU 1, fase de I/0 ou fase CPU 2*/
     private int tempoFaseCpu1;
     private int tempoDuracaoEntradaSaida;
     private int tempoFaseCpu2;
@@ -35,6 +35,14 @@ public class Processo {
 
     public String [] getTransicaoDeEstados() {
         return transicaoDeEstados;
+    }
+
+    public String getEstadoAtual() {
+        return transicaoDeEstados[0];
+    }
+
+    public String getEstadoNovo() {
+        return transicaoDeEstados[1];
     }
 
     public void setFaseAtual(String faseAtual) {
