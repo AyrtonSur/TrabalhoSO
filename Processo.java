@@ -6,9 +6,9 @@ public class Processo {
     private int tempoFaseCpu1;
     private int tempoDuracaoEntradaSaida;
     private int tempoFaseCpu2;
-    private int quantidadeDeMemoriaRAM;
+    private final int quantidadeDeMemoriaRAM;
 
-    public Processo() {
+    public Processo(int quantidadeDeMemoriaRAM) {
         idCounter++;
         this.id = "" + idCounter;
         this.transicaoDeEstados = new String[2];
@@ -18,7 +18,7 @@ public class Processo {
         this.tempoFaseCpu1 = 0;
         this.tempoDuracaoEntradaSaida = 0;
         this.tempoFaseCpu2 = 0;
-        this.quantidadeDeMemoriaRAM = 0;
+        this.quantidadeDeMemoriaRAM = quantidadeDeMemoriaRAM;
     }
 
     public void setTransicaoDeEstados(String estadoNovo) {
@@ -31,9 +31,14 @@ public class Processo {
         }
     }
 
-    public String [] getTransicaoDeEstados() {
-        return transicaoDeEstados;
+    public String getEstadoAtual() {
+        return transicaoDeEstados[0];
     }
+
+    public String getEstadoNovo() {
+        return transicaoDeEstados[1];
+    }
+
 
     public void setFaseAtual(String faseAtual) {
         this.faseAtual = faseAtual;
@@ -69,10 +74,6 @@ public class Processo {
 
     public int getTempoFaseCpu2() {
         return tempoFaseCpu2;
-    }
-
-    public void setQuantidadeDeMemoriaRAM(int quantidadeDeMemoriaRAM) {
-        this.quantidadeDeMemoriaRAM = quantidadeDeMemoriaRAM;
     }
 
     public int getQuantidadeDeMemoriaRAM() {
