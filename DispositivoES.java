@@ -5,8 +5,8 @@ class DispositivoES implements Runnable {
   private final Processo processo;
 
   public DispositivoES(Processo processo, Fila<Processo> auxiliar) {
-      this.processo = processo;
-      this.filaAuxiliar = auxiliar;
+    this.processo = processo;
+    this.filaAuxiliar = auxiliar;
   }
 
   @Override
