@@ -2,11 +2,7 @@ public class Processo {
     private static int idCounter = 0; /* Contador estático que define id do Projeto */
     private String id; /* id que recebe valor do Contador estático */
     private String [] transicaoDeEstados; /*Array que contem 2 elementos: [estadoAtual, estadoNovo] */
-    private String faseAtual; /*Atributo que guarda a fase CPU 1, operacao de I/O ou fase CPU 2 */
-    private int tempoFaseCpu1;
-    private int tempoDuracaoEntradaSaida;
-    private int tempoFaseCpu2;
-    private final int quantidadeDeMemoriaRAM;
+    private Descritor descritor;
 
     public Processo(int quantidadeDeMemoriaRAM) {
         idCounter++;
@@ -14,11 +10,7 @@ public class Processo {
         this.transicaoDeEstados = new String[2];
         this.transicaoDeEstados[0] = "Novo";
         this.transicaoDeEstados[1] = null;
-        this.faseAtual = null;
-        this.tempoFaseCpu1 = 0;
-        this.tempoDuracaoEntradaSaida = 0;
-        this.tempoFaseCpu2 = 0;
-        this.quantidadeDeMemoriaRAM = quantidadeDeMemoriaRAM;
+        this.descritor = new Descritor(id, null, 0, 0, 0, quantidadeDeMemoriaRAM);
     }
 
     public void setTransicaoDeEstados(String estadoNovo) {
@@ -41,11 +33,11 @@ public class Processo {
 
 
     public void setFaseAtual(String faseAtual) {
-        this.faseAtual = faseAtual;
+        descritor.setFaseAtual(faseAtual);
     }
 
     public String getFaseAtual() {
-        return faseAtual;
+        return descritor.getFaseAtual();
     }
 
     public String getId() {
@@ -53,41 +45,34 @@ public class Processo {
     }
 
     public void setTempoFaseCpu1(int tempoFaseCpu1) {
-        this.tempoFaseCpu1 = tempoFaseCpu1;
+        descritor.setTempoFaseCpu1(tempoFaseCpu1);
     }
 
     public int getTempoFaseCpu1() {
-        return tempoFaseCpu1;
+        return descritor.getTempoFaseCpu1();
     }
 
     public void setTempoDuracaoEntradaSaida(int tempoDuracaoEntradaSaida) {
-        this.tempoDuracaoEntradaSaida = tempoDuracaoEntradaSaida;
+        descritor.setTempoDuracaoEntradaSaida(tempoDuracaoEntradaSaida);
     }
 
     public int getTempoDuracaoEntradaSaida() {
-        return tempoDuracaoEntradaSaida;
+        return descritor.getTempoDuracaoEntradaSaida();
     }
 
     public void setTempoFaseCpu2(int tempoFaseCpu2) {
-        this.tempoFaseCpu2 = tempoFaseCpu2;
+        descritor.setTempoFaseCpu2(tempoFaseCpu2);
     }
 
     public int getTempoFaseCpu2() {
-        return tempoFaseCpu2;
+        return descritor.getTempoFaseCpu2();
     }
 
     public int getQuantidadeDeMemoriaRAM() {
-        return quantidadeDeMemoriaRAM;
+        return descritor.getQuantidadeDeMemoriaRAM();
     }
 
-    public String descritor () {
-        String descritor =
-                "ID Processo: " + id + " {\n" +
-                        "   Duração de CPU fase 1: " + tempoFaseCpu1 + "\n" +
-                        "   Duração de  I/O: " + tempoDuracaoEntradaSaida + "\n" +
-                        "   Duração de CPU fase 2: " + tempoFaseCpu2 + "\n" +
-                        "   Quantidade de Mbytes de RAM: " + quantidadeDeMemoriaRAM + "\n}"
-                ;
+    public Descritor getDescritor() {
         return descritor;
     }
 }
