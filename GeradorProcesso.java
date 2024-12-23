@@ -33,7 +33,7 @@ public class GeradorProcesso implements Runnable {
                 this.filaProntos.adicionar(processoAtual.getDescritor());
             }
             synchronized (this.memoriaP) {
-                this.memoriaP.enviarProcesso(processoAtual);
+                this.memoriaP.alocarMemoria(processoAtual, processoAtual.getQuantidadeDeMemoriaRAM());
             }
         }
     }

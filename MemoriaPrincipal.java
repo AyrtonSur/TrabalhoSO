@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,7 +14,6 @@ public class MemoriaPrincipal {
         this.menorEmaior = new HashMap<>();
         
     }
-
     
     public synchronized void alocarMemoria(Processo processo, int tamanho) {
         boolean alocado = false;
