@@ -24,7 +24,7 @@ public class GeradorProcesso implements Runnable {
     }
 
     private void processarProcessos() {
-        if (this.filaProcessos.peekFirst()) {
+        if (this.filaProcessos.peekFirst() != null) {
             Processo processoAtual;
             synchronized (this.filaProcessos) {
                 processoAtual = this.filaProcessos.pollFirst();
