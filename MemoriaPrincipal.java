@@ -87,9 +87,9 @@ public class MemoriaPrincipal {
     public Processo getprocesso(String Idprocesso){
         Processo processoBusca = null;
         for (Processo p : processos) {
-            if (p.getId() == Idprocesso) { // Busca pelo ID
+            if (p.getId() == Idprocesso) { 
                 processoBusca = p;
-                break; // Encontra o processo e interrompe o loop
+                break; 
             }
         }
         return processoBusca;
