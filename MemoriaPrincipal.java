@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 public class MemoriaPrincipal {
     private final int memoriaTotal = 32000;
-    
     private Collection<Processo> processos;
     private HashMap<String, int[]> menorEmaior;
     private byte[] alocacao;
@@ -56,7 +55,7 @@ public class MemoriaPrincipal {
             int inicio = valores[0];
             int finall = valores[1];
 
-            for (int i = inicio; i<=finall ;i++){
+            for (int i = inicio; i<finall ;i++){
                 alocacao[i]=0;
             }
 
@@ -85,6 +84,16 @@ public class MemoriaPrincipal {
         return memoriaTotal;
     }
 
+    public Processo getprocesso(String Idprocesso){
+        Processo processoBusca = null;
+        for (Processo p : processos) {
+            if (p.getId() == Idprocesso) { // Busca pelo ID
+                processoBusca = p;
+                break; // Encontra o processo e interrompe o loop
+            }
+        }
+        return processoBusca;
+    }
     public Collection<Processo> getProcessos() {
         return processos;
     }
