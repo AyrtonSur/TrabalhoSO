@@ -11,7 +11,6 @@ public class GeradorProcesso implements Runnable {
     private Fila<Descritor> filaProntos;
     private MemoriaPrincipal memoriaP;
 
-
     public GeradorProcesso(Fila<Descritor> filaProntos, MemoriaPrincipal memoriaP) {
         this.filaProcessos = new ArrayDeque<Processo>();
         this.filaProntos = filaProntos;
@@ -39,7 +38,7 @@ public class GeradorProcesso implements Runnable {
         }
     }
 
-    public void gerarProcesso(Fila<Processo> filaProntos) {
+    public void gerarProcesso() {
         /* Scanner para obter as informações dos novos processos */
         Scanner scanIN = new Scanner(System.in);
         
@@ -119,6 +118,7 @@ public class GeradorProcesso implements Runnable {
         this.adicionarProcesso(novoProcesso);
     }
 
+    @Override
     public void run() {
         while (true) { this.processarProcessos(); }
     }
