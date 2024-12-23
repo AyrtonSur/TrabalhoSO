@@ -50,7 +50,7 @@ public class MemoriaPrincipal {
     }
     
     public synchronized  void liberarmemoria(Processo processo){
-        int[] valores = menorEmaior.get(processo.getid());
+        int[] valores = menorEmaior.get(processo.getId());
         if (valores!=null){
             int inicio = valores[0];
             int finall = valores[1];
