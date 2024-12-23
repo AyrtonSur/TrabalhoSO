@@ -12,15 +12,24 @@ public class CPU implements Runnable {
 
     private void atualizarTempoDescritor(Descritor descritor, int quantum, String faseAtual) {
         if("Fase CPU 1".equals(faseAtual)) {
-            descritor.setTempoFaseCpu1(descritor.getTempoFaseCpu1() + quantum);
+            if(descritor.getTempoFaseCpu1() < quantum) {
+                quantum = descritor.getTempoFaseCpu1();
+            } else {
+                descritor.setTempoFaseCpu1(descritor.getTempoFaseCpu1() - quantum);
+            }
 
         } else if("Fase CPU 2".equals(faseAtual)) {
-            descritor.setTempoFaseCpu2(descritor.getTempoFaseCpu2() + quantum);
+            if(descritor.getTempoFaseCpu2() < quantum) {
+                quantum = descritor.getTempoFaseCpu2();
+            } else {
+                descritor.setTempoFaseCpu2(descritor.getTempoFaseCpu2() - quantum);
+            }
+
         }
     }
 
     public synchronized void execute(Descritor descritor, int quantum, String faseAtual){
-        if(descritor == null){
+        if(descritor == null) {
             this.descritor = descritor;
             this.quantum = quantum;
             this.faseAtual = faseAtual;
@@ -43,7 +52,7 @@ public class CPU implements Runnable {
             }
             if(descritor != null) {
                 try{
-                    System.out.println("Executando processo " + descritor.getId() + " com quantum de " + quantum * 100 + " milisegundos.");
+                    System.out.println("Executando processo " + descritor.getId() + "com tempo de " + quantum * 100 + " milisegundos.");
                     TimeUnit.MILLISECONDS.sleep(quantum * 100L);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
