@@ -5,10 +5,9 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 public class GeradorProcesso implements Runnable {
-    private static final String MENSAGEMERRO = "Erro: Informe um valor positivo maior que zero.";
-    
+    private static final String MENSAGEMERRO1 = "Erro: Informe um valor positivo maior que zero.";
+    private static final String MENSAGEMERRO2 = "Erro: Informe um valor positivo maior ou igual a zero.";
     private Deque<Processo> filaProcessos;
-
     private Fila<Descritor> filaProntos;
     private MemoriaPrincipal memoriaP;
 
@@ -31,8 +30,12 @@ public class GeradorProcesso implements Runnable {
             synchronized (this.filaProcessos) {
                 processoAtual = this.filaProcessos.pollFirst();
             }
-            this.filaProntos.adicionar(processoAtual.getDescritor());
-            this.memoriaP.enviarProcesso(processoAtual);
+            synchronized (this.filaProntos) {
+                this.filaProntos.adicionar(processoAtual.getDescritor());
+            }
+            synchronized (this.memoriaP) {
+                this.memoriaP.enviarProcesso(processoAtual);
+            }
         }
     }
 
@@ -51,7 +54,7 @@ public class GeradorProcesso implements Runnable {
                 System.out.printf("Informe o primeiro tempo de CPU: ");
                 tempoCPU1 = scanIN.nextInt();
                 if (tempoCPU1 <= 0) {
-                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO);
+                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO1);
                 }
                 break;
             } catch(InputMismatchException error) {
@@ -66,7 +69,7 @@ public class GeradorProcesso implements Runnable {
                 System.out.printf("Informe o tempo de ES: ");
                 tempoES = scanIN.nextInt();
                 if (tempoES < 0) {
-                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO);
+                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO2);
                 }
                 break;
             } catch(InputMismatchException error) {
@@ -81,7 +84,7 @@ public class GeradorProcesso implements Runnable {
                 System.out.printf("Informe o segundo tempo de cpu: ");
                 tempoCPU2 = scanIN.nextInt();
                 if (tempoCPU2 < 0) {
-                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO);
+                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO2);
                 }
                 break;
             } catch(InputMismatchException error) {
@@ -95,8 +98,8 @@ public class GeradorProcesso implements Runnable {
             try {
                 System.out.printf("Informe a quantidade de memória em MB do processo: ");
                 qtdMemoria = scanIN.nextInt();
-                if (qtdMemoria < 0) {
-                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO);
+                if (qtdMemoria <= 0) {
+                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO1);
                 }
                 break;
             } catch(InputMismatchException error) {
