@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class MemoriaPrincipal {
@@ -59,12 +60,55 @@ public class MemoriaPrincipal {
             menorEmaior.remove(processo.getId());
             processos.remove(processo);
             System.out.println("Memoria desalocada");
+            arrumarmemoria();
         }
         else{
             System.out.println("Este processo não foi alocado anteriormente");
         }
         
         
+    }
+    public synchronized  void arrumarmemoria(){
+        boolean arrumado=false;
+        int iterador = -1;
+        int iteradorProcuraAlocacao = 0;
+        int finalprocesso = 0;
+        int comecoprocesso = 0;
+        int tamanhoprocesso = 0;
+        while(iterador<32000){
+            iterador+=1;
+            if (alocacao[iterador] == 1){
+                continue;
+            }
+            if (alocacao[iterador] == 0){
+                iteradorProcuraAlocacao = iterador;
+                while(arrumado==false){
+                    if (alocacao[iteradorProcuraAlocacao] == 0){
+                        iteradorProcuraAlocacao+=1;
+                        continue;
+                    }
+                    if (alocacao[iteradorProcuraAlocacao] == 1){
+                         finalprocesso = getprocessomenor(iteradorProcuraAlocacao);
+                         comecoprocesso = iteradorProcuraAlocacao;
+                         tamanhoprocesso = (finalprocesso - comecoprocesso) +1;
+                         for (int i=comecoprocesso;i<=finalprocesso;i++){
+                            alocacao[i] = 0;
+                         }
+                         arrumado=true;
+
+                    }
+                }
+
+                for(int i = iterador;i< iterador+tamanhoprocesso;i++){
+                    alocacao[i] = 1;
+                }
+                finalprocesso = 0;
+                comecoprocesso = 0;
+                tamanhoprocesso = 0;
+                arrumado=false;
+                iteradorProcuraAlocacao = 0;
+            }
+        }
     }
 
     @Override
@@ -91,6 +135,19 @@ public class MemoriaPrincipal {
         }
         return processoBusca;
     }
+
+    public int getprocessomenor(int menor){
+        
+        for (Map.Entry<String, int[]> entrada : menorEmaior.entrySet()) {
+            int[] lista = entrada.getValue(); 
+            if (lista[0] == menor) { 
+                //chave=entrada.getkey();      
+                return lista[1];             
+            }
+        }
+        return -1;
+    }
+
     public Collection<Processo> getProcessos() {
         return processos;
     }
