@@ -26,7 +26,8 @@ class DispositivoES implements Runnable {
         System.out.printf("Descritor #%d finalizou operação de E/S.%n", descritor.getId());
 
         // Marca o Descritor como "pronto" e move para a fila de prontos
-        descritor.setTransicaoDeEstados("pronto");
+        Processo processo = MemoriaPrincipal.getInstance().getprocesso(descritor.getId());
+        processo.setTransicaoDeEstados("pronto");
         filaAuxiliar.adicionar(descritor);
     } else {
         // Aguarda brevemente antes de verificar novamente a fila de bloqueados
