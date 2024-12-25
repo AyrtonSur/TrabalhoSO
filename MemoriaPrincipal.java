@@ -7,6 +7,7 @@ import java.util.Map;
 
 
 public class MemoriaPrincipal {
+    private static MemoriaPrincipal instance;
     private final int memoriaTotal = 32000;
     private Collection<Processo> processos;
     private HashMap<String, int[]> menorEmaior;
@@ -17,7 +18,16 @@ public class MemoriaPrincipal {
         this.menorEmaior = new HashMap<>();
         
     }
-
+    public static MemoriaPrincipal getInstance() {
+        if (instance == null) {
+            synchronized (MemoriaPrincipal.class) {
+                if (instance == null) {
+                    instance = new MemoriaPrincipal();
+                }
+            }
+        }
+        return instance;
+    }
     
     public synchronized void alocarMemoria(Processo processo, int tamanho) {
         boolean alocado = false;
