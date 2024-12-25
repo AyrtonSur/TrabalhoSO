@@ -12,7 +12,7 @@ public class MemoriaPrincipal {
     private Collection<Processo> processos;
     private HashMap<String, int[]> menorEmaior;
     private byte[] alocacao;
-    public MemoriaPrincipal(){      
+    private MemoriaPrincipal(){      
         this.processos = new ArrayList<>();
         this.alocacao = new byte[32000];
         this.menorEmaior = new HashMap<>();
