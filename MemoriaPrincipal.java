@@ -32,9 +32,10 @@ public static MemoriaPrincipal getInstance() {
     
     public synchronized void alocarMemoria(Processo processo, int tamanho) {
         boolean alocado = false;
+        boolean arrumado = false;
         int countAlocacao = 0;
         int espacolivre = 0;
-        while (alocado==false && countAlocacao<32000){
+        while (alocado==false){
             if (alocacao[countAlocacao]== (byte) 0){
                 espacolivre +=1;
             }
@@ -50,6 +51,14 @@ public static MemoriaPrincipal getInstance() {
                 alocado = true;
             }
             countAlocacao+=1;
+            if (alocado==false && countAlocacao==32000 && arrumado==false){
+                arrumarmemoria();
+                countAlocacao=0;
+                arrumado = true;
+            }
+            if (arrumado==true && countAlocacao==32000){
+                break;
+            }
         }
 
         if (alocado==true) {      
@@ -57,7 +66,7 @@ public static MemoriaPrincipal getInstance() {
             System.out.println("Memoria alocada para o processo"+ processo.getId() + "no espaço de" + valores[0] + "-" + valores[1]);
         }
         else{
-            System.out.println("Não foi possível alocar a memória");
+            System.out.println("Não foi possível alocar a memória"); 
         }
     }
     
@@ -74,7 +83,7 @@ public static MemoriaPrincipal getInstance() {
             menorEmaior.remove(processo.getId());
             processos.remove(processo);
             System.out.println("Memoria desalocada");
-            arrumarmemoria();
+            
         }
         else{
             System.out.println("Este processo não foi alocado anteriormente");
