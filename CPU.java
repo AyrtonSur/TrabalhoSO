@@ -2,6 +2,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CPU implements Runnable {
     private Descritor descritor;
+    private Fila<Descritor> filaProntos;
     private int quantum;
     private String faseAtual;
     private boolean ativo = true;
@@ -30,9 +31,10 @@ public class CPU implements Runnable {
         }
     }
 
-    public synchronized void execute(Descritor descritor, int quantum, String faseAtual){
+    public synchronized void execute(Descritor descritor, Fila filaProntos, int quantum, String faseAtual){
         if(descritor == null) {
             this.descritor = descritor;
+            this.filaProntos = filaProntos;
             this.quantum = quantum;
             this.faseAtual = faseAtual;
             atualizarTempoDescritor(descritor, quantum, faseAtual);
@@ -67,13 +69,8 @@ public class CPU implements Runnable {
 
     private synchronized void liberarCPU() {
         System.out.println("CPU liberada após executar o processo.");
-        if(this.descritor.getTempoFaseCpu1() == 0) {
-            this.descritor.setTransicaoDeEstados("bloqueado");
-            this.descritor.setFaseAtual("E/S");
-        }
-        else {
-            this.descritor.setTransicaoDeEstados("pronto");
-        }
+        this.descritor.setTransicaoDeEstados("pronto");
+        this.filaProntos.adicionar(this.descritor);
         this.descritor = null;
         this.quantum = 0;
     }
