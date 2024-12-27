@@ -5,16 +5,30 @@ import java.util.Map;
 
 
 public class MemoriaPrincipal {
+    private static MemoriaPrincipal instance;
     private final int memoriaTotal = 32000;
     private Collection<Processo> processos;
     private HashMap<String, int[]> menorEmaior;
     private byte[] alocacao;
-    public MemoriaPrincipal(){      
+    private MemoriaPrincipal(){      
         this.processos = new ArrayList<>();
         this.alocacao = new byte[32000];
         this.menorEmaior = new HashMap<>();
         
     }
+
+public static MemoriaPrincipal getInstance() {
+    if (instance == null) {
+        synchronized (MemoriaPrincipal.class) {
+            if (instance == null) {
+                instance = new MemoriaPrincipal();
+            }
+        }
+    }
+    return instance;
+}
+
+
     
     public synchronized void alocarMemoria(Processo processo, int tamanho) {
         boolean alocado = false;
