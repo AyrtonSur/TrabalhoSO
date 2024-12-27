@@ -28,6 +28,7 @@ class DispositivoES implements Runnable {
         // Marca o Descritor como "pronto" e move para a fila de prontos
         Processo processo = MemoriaPrincipal.getInstance().getprocesso(descritor.getId());
         processo.setTransicaoDeEstados("pronto");
+        processo.setFaseAtual("FaseCpu2");
         filaAuxiliar.adicionar(descritor);
     } else {
         // Aguarda brevemente antes de verificar novamente a fila de bloqueados

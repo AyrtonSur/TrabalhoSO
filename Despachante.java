@@ -17,19 +17,38 @@ class Despachante implements Runnable {
   @Override
   public void run() {
     while (true) {
-      for (CPU cpu : cpus) {
-        while (cpu.getDescritor() == null) { // Enquanto cpu estiver livre loop irá se repetir até que um descritor seja alocado para CPU
-          Descritor descritor = filaAuxiliar.remover();
-          if (descritor != null) { // verifica se existe um descritor na filaAuxiliar dando preferência para a fila
-            Processo processo = memoriaPrincipal.getprocesso(descritor.getId());
-            processo.setTransicaoDeEstados("executando"); // Descritor passa para estado executando
-            cpu.execute(descritor, QUANTUM, descritor.getFaseAtual()); // Descritor é entregue para a cpu para começar a executar
-          } else { // para o caso em que não tinha Descritors na filaAuxiliar
-            descritor = filaProntos.remover(); // pega o Descritor da fila de prontos
-            if (descritor != null) { // tem Descritor na fila de prontos
-              Processo processo = memoriaPrincipal.getprocesso(descritor.getId());
+      Descritor descritor = filaAuxiliar.remover();
+      if (descritor == null) {
+        descritor = filaProntos.remover();
+      }
+  
+      if (descritor != null) {
+        Processo processo = memoriaPrincipal.getprocesso(descritor.getId());
+        boolean alocado = false;
+
+        if (processo.getFaseAtual().equals("FaseCpu1")  && processo.getTempoFaseCpu1() == 0) {
+          processo.setFaseAtual("FaseEntradaSaida");
+          processo.setTransicaoDeEstados("bloqueado");
+          alocado = true;
+          DispositivoES ES = new DispositivoES(descritor, filaAuxiliar);
+          Thread threadES = new Thread(ES);
+          threadES.start();
+        } else if (processo.getFaseAtual().equals("FaseCpu2") && processo.getTempoFaseCpu2() == 0) {
+          processo.setFaseAtual("Finalizado");
+          processo.setTransicaoDeEstados("finalizado");
+          alocado = true;
+          memoriaPrincipal.liberarmemoria(processo);
+        }
+
+  
+
+        while(!alocado) {
+          for (CPU cpu : cpus) {
+            if (cpu.getDescritor() == null) {
               processo.setTransicaoDeEstados("executando");
-              cpu.execute(descritor, QUANTUM, descritor.getFaseAtual());
+              cpu.execute(descritor, filaProntos, QUANTUM, descritor.getFaseAtual());
+              alocado = true;
+              break;
             }
           }
         }
