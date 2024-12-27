@@ -14,6 +14,7 @@ public class CPU implements Runnable {
         if("Fase CPU 1".equals(faseAtual)) {
             if(descritor.getTempoFaseCpu1() < quantum) {
                 quantum = descritor.getTempoFaseCpu1();
+                descritor.setTempoFaseCpu1(0);
             } else {
                 descritor.setTempoFaseCpu1(descritor.getTempoFaseCpu1() - quantum);
             }
@@ -21,6 +22,7 @@ public class CPU implements Runnable {
         } else if("Fase CPU 2".equals(faseAtual)) {
             if(descritor.getTempoFaseCpu2() < quantum) {
                 quantum = descritor.getTempoFaseCpu2();
+                descritor.setTempoFaseCpu2(0);
             } else {
                 descritor.setTempoFaseCpu2(descritor.getTempoFaseCpu2() - quantum);
             }
@@ -65,6 +67,13 @@ public class CPU implements Runnable {
 
     private synchronized void liberarCPU() {
         System.out.println("CPU liberada após executar o processo.");
+        if(this.descritor.getTempoFaseCpu1() == 0) {
+            this.descritor.setTransicaoDeEstados("bloqueado");
+            this.descritor.setFaseAtual("E/S");
+        }
+        else {
+            this.descritor.setTransicaoDeEstados("pronto");
+        }
         this.descritor = null;
         this.quantum = 0;
     }

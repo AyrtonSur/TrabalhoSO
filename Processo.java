@@ -10,7 +10,7 @@ public class Processo {
         this.transicaoDeEstados = new String[2];
         this.transicaoDeEstados[0] = "Novo";
         this.transicaoDeEstados[1] = null;
-        this.descritor = new Descritor(id, null, 0, 0, 0, quantidadeDeMemoriaRAM);
+        this.descritor = new Descritor(id, transicaoDeEstados, null, 0, 0, 0, quantidadeDeMemoriaRAM);
     }
 
     public void setTransicaoDeEstados(String estadoNovo) {
@@ -21,6 +21,7 @@ public class Processo {
             transicaoDeEstados[0] = transicaoDeEstados[1];
             transicaoDeEstados[1] = estadoNovo;
         }
+        descritor.setVetorTransicaoDeEstados(transicaoDeEstados);
     }
 
     public String getEstadoAtual() {

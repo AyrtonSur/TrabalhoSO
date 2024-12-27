@@ -1,16 +1,16 @@
-import java.util.ArrayList;
-
 public class Descritor {
     private String id;
     private String faseAtual;
+    public String [] transicaoDeEstados;
     private int tempoFaseCpu1;
     private int tempoDuracaoEntradaSaida;
     private int tempoFaseCpu2;
     private final int quantidadeDeMemoriaRAM;
 
 
-    public Descritor(String id, String faseAtual, int tempoFaseCpu1, int tempoDuracaoEntradaSaida, int tempoFaseCpu2, int quantidadeDeMemoriaRAM) {
+    public Descritor(String id, String [] transicaoDeEstados, String faseAtual, int tempoFaseCpu1, int tempoDuracaoEntradaSaida, int tempoFaseCpu2, int quantidadeDeMemoriaRAM) {
         this.id = id;
+        this.transicaoDeEstados = transicaoDeEstados;
         this.faseAtual = faseAtual;
         this.tempoFaseCpu1 = tempoFaseCpu1;
         this.tempoDuracaoEntradaSaida = tempoDuracaoEntradaSaida;
@@ -20,6 +20,28 @@ public class Descritor {
 
     public String getId() {
         return id;
+    }
+
+    public String [] getTransicaoDeEstados() {
+        return transicaoDeEstados;
+    }
+
+    public String getEstadoAtual() {
+        return transicaoDeEstados[0];
+    }
+
+    public String getEstadoNovo() {
+        return transicaoDeEstados[1];
+    }
+
+    public void setVetorTransicaoDeEstados(String [] transicaoDeEstados) {
+        this.transicaoDeEstados = transicaoDeEstados;
+    }
+
+    public void setTransicaoDeEstados(String estadoNovo) {
+        MemoriaPrincipal mp = MemoriaPrincipal.getInstance();
+        Processo p = mp.getprocesso(id);
+        p.setTransicaoDeEstados(estadoNovo);
     }
 
     public String getFaseAtual() {
