@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,16 +16,19 @@ public class MemoriaPrincipal {
         this.menorEmaior = new HashMap<>();
         
     }
-    public static MemoriaPrincipal getInstance() {
-        if (instance == null) {
-            synchronized (MemoriaPrincipal.class) {
-                if (instance == null) {
-                    instance = new MemoriaPrincipal();
-                }
+
+public static MemoriaPrincipal getInstance() {
+    if (instance == null) {
+        synchronized (MemoriaPrincipal.class) {
+            if (instance == null) {
+                instance = new MemoriaPrincipal();
             }
         }
-        return instance;
     }
+    return instance;
+}
+
+
     
     public synchronized void alocarMemoria(Processo processo, int tamanho) {
         boolean alocado = false;
