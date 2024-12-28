@@ -20,7 +20,7 @@ public class Fila <T> implements Iterable<T> {
         }
     }
 
-    public String adicionar(T processo) {
+    public synchronized String adicionar(T processo) {
          if(fila.size() < tamanhoMaximo) {
              fila.add(processo);
              return "Processo adicionado na fila";
@@ -29,11 +29,11 @@ public class Fila <T> implements Iterable<T> {
          }
     }
 
-    public T remover() {
+    public synchronized T remover() {
         return fila.poll();
     }
 
-    public T visualizar(){
+    public synchronized T visualizar(){
         return fila.peek();
     }
 
@@ -41,11 +41,11 @@ public class Fila <T> implements Iterable<T> {
         return fila.size();
     }
 
-    public boolean estaVazia() {
+    public synchronized boolean estaVazia() {
         return fila.isEmpty();
     }
 
-    public boolean estaCheia() {
+    public synchronized boolean estaCheia() {
         return fila.size() == tamanhoMaximo;
     }
 
@@ -53,7 +53,7 @@ public class Fila <T> implements Iterable<T> {
         return fila.iterator(); // Return the LinkedList iterator
     }
 
-    public String toString() {
+    public synchronized String toString() {
         return "Fila: " + fila.toString() + " (Tamanho Máximo: " + tamanhoMaximo + ")";
     }
 }

@@ -63,7 +63,7 @@ public static MemoriaPrincipal getInstance() {
 
         if (alocado==true) {      
             int[] valores = menorEmaior.get(processo.getId());
-            System.out.println("Memoria alocada para o processo"+ processo.getId() + "no espaço de" + valores[0] + "-" + valores[1]);
+            System.out.println("Memoria alocada para o processo "+ processo.getId() + " no espaço de " + valores[0] + "-" + valores[1]);
         }
         else{
             System.out.println("Não foi possível alocar a memória"); 

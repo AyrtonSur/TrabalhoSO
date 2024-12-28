@@ -12,7 +12,7 @@ public class CPU implements Runnable {
     }
 
     private void atualizarTempoDescritor(Descritor descritor, int quantum, String faseAtual) {
-        if("Fase CPU 1".equals(faseAtual)) {
+        if("FaseCPU1".equals(faseAtual)) {
             if(descritor.getTempoFaseCpu1() < quantum) {
                 quantum = descritor.getTempoFaseCpu1();
                 descritor.setTempoFaseCpu1(0);
@@ -20,7 +20,7 @@ public class CPU implements Runnable {
                 descritor.setTempoFaseCpu1(descritor.getTempoFaseCpu1() - quantum);
             }
 
-        } else if("Fase CPU 2".equals(faseAtual)) {
+        } else if("FaseCPU2".equals(faseAtual)) {
             if(descritor.getTempoFaseCpu2() < quantum) {
                 quantum = descritor.getTempoFaseCpu2();
                 descritor.setTempoFaseCpu2(0);
@@ -32,14 +32,12 @@ public class CPU implements Runnable {
     }
 
     public synchronized void execute(Descritor descritor, Fila filaProntos, int quantum, String faseAtual){
-        if(descritor == null) {
-            this.descritor = descritor;
-            this.filaProntos = filaProntos;
-            this.quantum = quantum;
-            this.faseAtual = faseAtual;
-            atualizarTempoDescritor(descritor, quantum, faseAtual);
-            notify();
-        }
+        this.descritor = descritor;
+        this.filaProntos = filaProntos;
+        this.quantum = quantum;
+        this.faseAtual = faseAtual;
+        atualizarTempoDescritor(descritor, quantum, faseAtual);
+        notify();
     }
 
     public void run() {
@@ -56,7 +54,7 @@ public class CPU implements Runnable {
             }
             if(descritor != null) {
                 try{
-                    System.out.println("Executando processo " + descritor.getId() + "com tempo de " + quantum * 100 + " milisegundos.");
+                    System.out.println("Executando processo " + descritor.getId() + " com tempo de " + quantum * 100 + " milisegundos.");
                     TimeUnit.MILLISECONDS.sleep(quantum * 100L);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();

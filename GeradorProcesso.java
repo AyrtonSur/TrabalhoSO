@@ -25,15 +25,18 @@ public class GeradorProcesso implements Runnable {
 
     private void processarProcessos() {
         if (this.filaProcessos.peekFirst() != null) {
+            System.out.println("Fila de Processos...");
             Processo processoAtual;
             synchronized (this.filaProcessos) {
                 processoAtual = this.filaProcessos.pollFirst();
             }
-            synchronized (this.filaProntos) {
-                this.filaProntos.adicionar(processoAtual.getDescritor());
-            }
+            System.out.println("Alocando memória.");
             synchronized (this.memoriaP) {
                 this.memoriaP.alocarMemoria(processoAtual, processoAtual.getQuantidadeDeMemoriaRAM());
+            }
+            synchronized (this.filaProntos) {
+                System.out.println("Adicionando na fila de prontos.");
+                this.filaProntos.adicionar(processoAtual.getDescritor());
             }
         }
     }
@@ -110,12 +113,19 @@ public class GeradorProcesso implements Runnable {
         // TODO: retornar booleano ao alocar memória na mp? Contadição entre alocar memoria e criar processo
 
         Processo novoProcesso = new Processo(qtdMemoria);
-        novoProcesso.setFaseAtual("Novo");
+        novoProcesso.setFaseAtual("FaseCPU1");
         novoProcesso.setTempoFaseCpu1(tempoCPU1);
         novoProcesso.setTempoDuracaoEntradaSaida(tempoES);
         novoProcesso.setTempoFaseCpu2(tempoCPU2);
+        novoProcesso.setTransicaoDeEstados("Pronto");
+
 
         this.adicionarProcesso(novoProcesso);
+
+        for(Processo p : filaProcessos) {
+            System.out.println(p.getDescritor().toString());
+        }
+
     }
 
     @Override
