@@ -20,6 +20,11 @@ public class GeradorProcesso implements Runnable {
     private void adicionarProcesso(Processo p) {
         synchronized(this.filaProcessos) {
             this.filaProcessos.addLast(p);
+            System.out.println("Processo adicionado: " + p);
+            for (Descritor descritor : filaProntos) {
+                System.out.println("ID: " + descritor.getId());
+            }
+
         }
     }
 
@@ -57,8 +62,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
 
@@ -72,8 +77,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
 
@@ -87,8 +92,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
         
@@ -102,8 +107,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
         
