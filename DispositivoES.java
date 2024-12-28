@@ -12,8 +12,8 @@ class DispositivoES implements Runnable {
   @Override
   public void run() {
     if (descritor != null) {
-        System.out.printf("Descritor #%d iniciou operação de E/S por %d u.t.%n",
-                descritor.getId(), descritor.getTempoDuracaoEntradaSaida());
+        System.out.println("Descritor " + descritor.getId() + " iniciou operação de E/S por " +
+                descritor.getTempoDuracaoEntradaSaida());
 
         // Simula o tempo de E/S
         try {
@@ -23,12 +23,13 @@ class DispositivoES implements Runnable {
             return;
         }
 
-        System.out.printf("Descritor #%d finalizou operação de E/S.%n", descritor.getId());
+        System.out.println("Descritor " + descritor.getId() + " finalizou operação de E/S.");
 
         // Marca o Descritor como "pronto" e move para a fila de prontos
         Processo processo = MemoriaPrincipal.getInstance().getprocesso(descritor.getId());
-        processo.setTransicaoDeEstados("pronto");
-        processo.setFaseAtual("FaseCpu2");
+        processo.setTransicaoDeEstados("Pronto");
+        processo.setFaseAtual("FaseCPU2");
+        processo.setTempoDuracaoEntradaSaida(0);
         filaAuxiliar.adicionar(descritor);
     } else {
         // Aguarda brevemente antes de verificar novamente a fila de bloqueados

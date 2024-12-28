@@ -17,32 +17,38 @@ class Despachante implements Runnable {
   @Override
   public void run() {
     while (true) {
-      Descritor descritor = filaAuxiliar.remover();
+      Descritor descritor;
+      synchronized (this.filaAuxiliar) {
+        descritor = filaAuxiliar.remover();
+      }
       if (descritor == null) {
-        descritor = filaProntos.remover();
+        synchronized (this.filaProntos) {
+          descritor = filaProntos.remover();
+        }
       }
   
       if (descritor != null) {
+        System.out.println("Descrito nao nulo.");
         Processo processo = memoriaPrincipal.getprocesso(descritor.getId());
         boolean alocado = false;
 
-        if (processo.getFaseAtual().equals("FaseCpu1")  && processo.getTempoFaseCpu1() == 0) {
+        if (processo.getFaseAtual().equals("FaseCPU1")  && processo.getTempoFaseCpu1() == 0) {
           if (processo.getTempoDuracaoEntradaSaida() == 0) {
             processo.setFaseAtual("Finalizado");
-            processo.setTransicaoDeEstados("finalizado");
+            processo.setTransicaoDeEstados("Finalizado");
             alocado = true;
             memoriaPrincipal.liberarmemoria(processo);
           } else {
             processo.setFaseAtual("FaseEntradaSaida");
-            processo.setTransicaoDeEstados("bloqueado");
+            processo.setTransicaoDeEstados("Bloqueado");
             alocado = true;
             DispositivoES ES = new DispositivoES(descritor, filaAuxiliar);
             Thread threadES = new Thread(ES);
             threadES.start();
           }
-        } else if (processo.getFaseAtual().equals("FaseCpu2") && processo.getTempoFaseCpu2() == 0) {
+        } else if (processo.getFaseAtual().equals("FaseCPU2") && processo.getTempoFaseCpu2() == 0) {
           processo.setFaseAtual("Finalizado");
-          processo.setTransicaoDeEstados("finalizado");
+          processo.setTransicaoDeEstados("Finalizado");
           alocado = true;
           memoriaPrincipal.liberarmemoria(processo);
         }
@@ -52,7 +58,7 @@ class Despachante implements Runnable {
         while(!alocado) {
           for (CPU cpu : cpus) {
             if (cpu.getDescritor() == null) {
-              processo.setTransicaoDeEstados("executando");
+              processo.setTransicaoDeEstados("Executando");
               cpu.execute(descritor, filaProntos, QUANTUM, descritor.getFaseAtual());
               alocado = true;
               break;
