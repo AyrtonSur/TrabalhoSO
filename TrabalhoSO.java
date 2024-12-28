@@ -34,10 +34,6 @@ class TrabalhoSO {
     threadGerador.start();
 
     geradorProcesso.gerarProcesso();
-
-
-
-
-
+    
   }
 }
