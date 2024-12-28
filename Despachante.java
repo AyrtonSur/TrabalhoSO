@@ -28,7 +28,7 @@ class Despachante implements Runnable {
       }
   
       if (descritor != null) {
-        System.out.println("Descrito nao nulo.");
+        System.out.println("Descritor nao nulo.");
         Processo processo = memoriaPrincipal.getprocesso(descritor.getId());
         boolean alocado = false;
 
