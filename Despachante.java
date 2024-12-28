@@ -27,12 +27,19 @@ class Despachante implements Runnable {
         boolean alocado = false;
 
         if (processo.getFaseAtual().equals("FaseCpu1")  && processo.getTempoFaseCpu1() == 0) {
-          processo.setFaseAtual("FaseEntradaSaida");
-          processo.setTransicaoDeEstados("bloqueado");
-          alocado = true;
-          DispositivoES ES = new DispositivoES(descritor, filaAuxiliar);
-          Thread threadES = new Thread(ES);
-          threadES.start();
+          if (processo.getTempoDuracaoEntradaSaida() == 0) {
+            processo.setFaseAtual("Finalizado");
+            processo.setTransicaoDeEstados("finalizado");
+            alocado = true;
+            memoriaPrincipal.liberarmemoria(processo);
+          } else {
+            processo.setFaseAtual("FaseEntradaSaida");
+            processo.setTransicaoDeEstados("bloqueado");
+            alocado = true;
+            DispositivoES ES = new DispositivoES(descritor, filaAuxiliar);
+            Thread threadES = new Thread(ES);
+            threadES.start();
+          }
         } else if (processo.getFaseAtual().equals("FaseCpu2") && processo.getTempoFaseCpu2() == 0) {
           processo.setFaseAtual("Finalizado");
           processo.setTransicaoDeEstados("finalizado");
