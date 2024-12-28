@@ -57,8 +57,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
 
@@ -72,8 +72,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
 
@@ -87,8 +87,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
         
@@ -102,8 +102,8 @@ public class GeradorProcesso implements Runnable {
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println(error);
-                continue;
+                System.out.println("Erro: " + error);
+                scanIN.nextLine();
             }
         }
         
