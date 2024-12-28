@@ -20,11 +20,6 @@ public class GeradorProcesso implements Runnable {
     private void adicionarProcesso(Processo p) {
         synchronized(this.filaProcessos) {
             this.filaProcessos.addLast(p);
-            System.out.println("Processo adicionado: " + p);
-            for (Descritor descritor : filaProntos) {
-                System.out.println("ID: " + descritor.getId());
-            }
-
         }
     }
 
