@@ -10,6 +10,7 @@ public class GeradorProcesso implements Runnable {
     private Deque<Processo> filaProcessos;
     private Fila<Descritor> filaProntos;
     private MemoriaPrincipal memoriaP;
+    private Processo processoAtual = null;
 
     public GeradorProcesso(Fila<Descritor> filaProntos, MemoriaPrincipal memoriaP) {
         this.filaProcessos = new ArrayDeque<Processo>();
@@ -24,20 +25,19 @@ public class GeradorProcesso implements Runnable {
     }
 
     private void processarProcessos() {
-        if (this.filaProcessos.peekFirst() != null) {
-            System.out.println("Fila de Processos...");
-            Processo processoAtual;
-            synchronized (this.filaProcessos) {
-                processoAtual = this.filaProcessos.pollFirst();
+        synchronized (this.filaProcessos) {
+            if (this.filaProcessos.peekFirst() != null) {
+                this.processoAtual = this.filaProcessos.pollFirst();
             }
-            System.out.println("Alocando memória.");
+        }
+        if (this.processoAtual != null) {
             synchronized (this.memoriaP) {
-                this.memoriaP.alocarMemoria(processoAtual, processoAtual.getQuantidadeDeMemoriaRAM());
+                this.memoriaP.alocarMemoria(this.processoAtual, processoAtual.getQuantidadeDeMemoriaRAM());
             }
             synchronized (this.filaProntos) {
-                System.out.println("Adicionando na fila de prontos.");
-                this.filaProntos.adicionar(processoAtual.getDescritor());
+                this.filaProntos.adicionar(this.processoAtual.getDescritor());
             }
+            this.processoAtual = null;
         }
     }
 
@@ -121,10 +121,6 @@ public class GeradorProcesso implements Runnable {
 
 
         this.adicionarProcesso(novoProcesso);
-
-        for(Processo p : filaProcessos) {
-            System.out.println(p.getDescritor().toString());
-        }
 
     }
 
