@@ -1,12 +1,14 @@
-import java.lang.Runnable;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.util.regex.Pattern;
+import java.util.Scanner;
 
 public class GeradorProcesso implements Runnable {
     private static final String MENSAGEMERRO1 = "Erro: Informe um valor positivo maior que zero.";
     private static final String MENSAGEMERRO2 = "Erro: Informe um valor positivo maior ou igual a zero.";
+    private static final String MENSAGEMERRO3 = "Erro: Espaço insuficiente disponível para alocar o processo.";
+    private static final String MENSAGEMERRO4 = "Erro: Apenas números inteiros positivos são aceitos.";
     private Deque<Processo> filaProcessos;
     private Fila<Descritor> filaProntos;
     private MemoriaPrincipal memoriaP;
@@ -47,21 +49,31 @@ public class GeradorProcesso implements Runnable {
         
         int tempoCPU1, tempoES, tempoCPU2, qtdMemoria;
 
-        System.out.println("---------------------------------");
-        System.out.println("Interface de Criação de Processos");
+        System.out.println("|---------------------------------|");
+        System.out.println(" Interface de Criação de Processos");
+        System.out.println("  (digite \'sair\' para cancelar')\n");
         
+        String respostaUsuario;
         /* Loop para obtenção do primeiro tempo de cpu */
         while (true) {
             try {
                 System.out.printf("Informe o primeiro tempo de CPU: ");
-                tempoCPU1 = scanIN.nextInt();
+                respostaUsuario = scanIN.nextLine().strip().toLowerCase();
+                if (respostaUsuario.equals("sair")) return;
+                
+                if (!Pattern.matches("^\\d+$", respostaUsuario))
+                    throw new NumberFormatException(GeradorProcesso.MENSAGEMERRO4);
+
+                tempoCPU1 = Integer.parseInt(respostaUsuario);
                 if (tempoCPU1 <= 0) {
                     throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO1);
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println("Erro: " + error);
+                System.out.println(error.getMessage());
                 scanIN.nextLine();
+            } catch(NumberFormatException error) {
+                System.out.println(error.getMessage());
             }
         }
 
@@ -69,29 +81,44 @@ public class GeradorProcesso implements Runnable {
         while (true) {
             try {
                 System.out.printf("Informe o tempo de ES: ");
-                tempoES = scanIN.nextInt();
+                respostaUsuario = scanIN.nextLine().strip().toLowerCase();
+
+                if (respostaUsuario.equals("sair")) return;
+                if (!Pattern.matches("^\\d+$", respostaUsuario))
+                    throw new NumberFormatException(GeradorProcesso.MENSAGEMERRO4);
+                
+                tempoES = Integer.parseInt(respostaUsuario);
                 if (tempoES < 0) {
                     throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO2);
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println("Erro: " + error);
+                System.out.println(error.getMessage());
                 scanIN.nextLine();
+            } catch(NumberFormatException error) {
+                System.out.println(error.getMessage());
             }
         }
 
         /* Loop para obtenção do segundo tempo de cpu */
         while (true) {
             try {
-                System.out.printf("Informe o segundo tempo de cpu: ");
-                tempoCPU2 = scanIN.nextInt();
+                System.out.printf("Informe o segundo tempo de CPU: ");
+                respostaUsuario = scanIN.nextLine().strip().toLowerCase();
+                if (respostaUsuario.equals("sair")) return;
+                if (!Pattern.matches("^\\d+$", respostaUsuario))
+                    throw new NumberFormatException(GeradorProcesso.MENSAGEMERRO4);
+                
+                tempoCPU2 = Integer.parseInt(respostaUsuario);
                 if (tempoCPU2 < 0) {
                     throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO2);
                 }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println("Erro: " + error);
+                System.out.println(error.getMessage());
                 scanIN.nextLine();
+            } catch(NumberFormatException error) {
+                System.out.println(error.getMessage());
             }
         }
         
@@ -99,14 +126,23 @@ public class GeradorProcesso implements Runnable {
         while (true) {
             try {
                 System.out.printf("Informe a quantidade de memória em MB do processo: ");
-                qtdMemoria = scanIN.nextInt();
+                respostaUsuario = scanIN.nextLine().strip().toLowerCase();
+                if (respostaUsuario.equals("sair")) return;
+                if (!Pattern.matches("^\\d+$", respostaUsuario))
+                    throw new NumberFormatException(GeradorProcesso.MENSAGEMERRO4);
+                qtdMemoria = Integer.parseInt(respostaUsuario);
                 if (qtdMemoria <= 0) {
                     throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO1);
                 }
+                if (!this.memoriaP.possivelAlocacao(qtdMemoria)) {
+                    throw new InputMismatchException(GeradorProcesso.MENSAGEMERRO3);
+                }
                 break;
             } catch(InputMismatchException error) {
-                System.out.println("Erro: " + error);
+                System.out.println(error.getMessage());
                 scanIN.nextLine();
+            } catch(NumberFormatException error) {
+                System.out.println(error.getMessage());
             }
         }
         
@@ -118,7 +154,6 @@ public class GeradorProcesso implements Runnable {
         novoProcesso.setTempoDuracaoEntradaSaida(tempoES);
         novoProcesso.setTempoFaseCpu2(tempoCPU2);
         novoProcesso.setTransicaoDeEstados("Pronto");
-
 
         this.adicionarProcesso(novoProcesso);
 
