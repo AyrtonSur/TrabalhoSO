@@ -1,20 +1,19 @@
 import java.util.concurrent.TimeUnit;
 
 public class CPU implements Runnable {
+    private static final long DURACAOQUANTUMMS = 1000L;
     private Descritor descritor;
     private Fila<Descritor> filaProntos;
     private int quantum;
-    private String faseAtual;
     private boolean ativo = true;
 
-    public synchronized Descritor getDescritor() {
-        return descritor;
-    }
+    public Descritor getDescritor() { return descritor; }
 
     private void atualizarTempoDescritor(Descritor descritor, int quantum, String faseAtual) {
+        descritor.setFaseAtual(faseAtual);
         if("FaseCPU1".equals(faseAtual)) {
             if(descritor.getTempoFaseCpu1() < quantum) {
-                quantum = descritor.getTempoFaseCpu1();
+                this.quantum = descritor.getTempoFaseCpu1();
                 descritor.setTempoFaseCpu1(0);
             } else {
                 descritor.setTempoFaseCpu1(descritor.getTempoFaseCpu1() - quantum);
@@ -22,7 +21,7 @@ public class CPU implements Runnable {
 
         } else if("FaseCPU2".equals(faseAtual)) {
             if(descritor.getTempoFaseCpu2() < quantum) {
-                quantum = descritor.getTempoFaseCpu2();
+                this.quantum = descritor.getTempoFaseCpu2();
                 descritor.setTempoFaseCpu2(0);
             } else {
                 descritor.setTempoFaseCpu2(descritor.getTempoFaseCpu2() - quantum);
@@ -31,11 +30,10 @@ public class CPU implements Runnable {
         }
     }
 
-    public synchronized void execute(Descritor descritor, Fila filaProntos, int quantum, String faseAtual){
+    public synchronized void execute(Descritor descritor, Fila<Descritor> filaProntos, int quantum, String faseAtual){
         this.descritor = descritor;
         this.filaProntos = filaProntos;
         this.quantum = quantum;
-        this.faseAtual = faseAtual;
         atualizarTempoDescritor(descritor, quantum, faseAtual);
         notify();
     }
@@ -43,7 +41,7 @@ public class CPU implements Runnable {
     public void run() {
         while(ativo) {
             synchronized(this) {
-                while(descritor == null & ativo) {
+                while(descritor == null && ativo) {
                     try {
                         wait();
                     } catch (InterruptedException e) {
@@ -53,9 +51,9 @@ public class CPU implements Runnable {
                 }
             }
             if(descritor != null) {
-                try{
-                    System.out.println("Executando processo " + descritor.getId() + " com tempo de " + quantum * 100 + " milisegundos.");
-                    TimeUnit.MILLISECONDS.sleep(quantum * 100L);
+                try {
+                    // System.out.println("Executando processo " + descritor.getId() + " com tempo de " + quantum * 100 + " milisegundos.");
+                    TimeUnit.MILLISECONDS.sleep(this.quantum * CPU.DURACAOQUANTUMMS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 } finally {
@@ -66,7 +64,7 @@ public class CPU implements Runnable {
     }
 
     private synchronized void liberarCPU() {
-        System.out.println("CPU liberada após executar o processo.");
+        // System.out.println("CPU liberada após executar o processo.");
         this.descritor.setTransicaoDeEstados("pronto");
         this.filaProntos.adicionar(this.descritor);
         this.descritor = null;
