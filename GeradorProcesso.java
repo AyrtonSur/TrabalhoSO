@@ -164,12 +164,6 @@ public class GeradorProcesso implements Runnable {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             this.processarProcessos();
-            try {
-                TimeUnit.MILLISECONDS.sleep(50); // Simula controle periódico
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
         }
     }
 }
