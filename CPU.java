@@ -39,7 +39,7 @@ public class CPU implements Runnable {
     }
 
     public void run() {
-        while(ativo) {
+        while(!Thread.currentThread().isInterrupted()) {
             synchronized(this) {
                 while(descritor == null && ativo) {
                     try {

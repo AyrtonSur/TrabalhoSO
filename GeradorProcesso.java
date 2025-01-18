@@ -3,6 +3,7 @@ import java.util.Deque;
 import java.util.InputMismatchException;
 import java.util.regex.Pattern;
 import java.util.Scanner;
+import java.lang.InterruptedException;
 
 public class GeradorProcesso implements Runnable {
     private static final String MENSAGEMERRO1 = "Erro: Informe um valor positivo maior que zero.";
@@ -161,6 +162,8 @@ public class GeradorProcesso implements Runnable {
 
     @Override
     public void run() {
-        while (true) { this.processarProcessos(); }
+        while (!Thread.currentThread().isInterrupted()) {
+            this.processarProcessos();
+        }
     }
 }
