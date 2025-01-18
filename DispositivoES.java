@@ -1,6 +1,7 @@
 import java.util.concurrent.TimeUnit;
 
 class DispositivoES implements Runnable {
+  private static final long DURACAOQUANTUMS = 1000L;
   private final Fila<Descritor> filaAuxiliar; // Fila que os Descritors seram enviados para
   private final Descritor descritor;
 
@@ -9,21 +10,22 @@ class DispositivoES implements Runnable {
     this.filaAuxiliar = auxiliar;
   }
 
+  public Descritor getDescritor() { return this.descritor; }
+
   @Override
   public void run() {
     if (descritor != null) {
-        System.out.println("Descritor " + descritor.getId() + " iniciou operação de E/S por " +
-                descritor.getTempoDuracaoEntradaSaida());
-
         // Simula o tempo de E/S
         try {
-            TimeUnit.MILLISECONDS.sleep(descritor.getTempoDuracaoEntradaSaida() * 100); // Multiplica para ajustar unidades de tempo
+            TimeUnit.MILLISECONDS.sleep(descritor.getTempoDuracaoEntradaSaida() * DispositivoES.DURACAOQUANTUMS); // Multiplica para ajustar unidades de tempo
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             return;
         }
 
-        System.out.println("Descritor " + descritor.getId() + " finalizou operação de E/S.");
+        ObservadorEstados.removerArrayDispositivosES(this);
+
+        // System.out.println("Descritor " + descritor.getId() + " finalizou operação de E/S.");
 
         // Marca o Descritor como "pronto" e move para a fila de prontos
         Processo processo = MemoriaPrincipal.getInstance().getprocesso(descritor.getId());

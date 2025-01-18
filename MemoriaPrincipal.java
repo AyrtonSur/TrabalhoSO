@@ -17,18 +17,18 @@ public class MemoriaPrincipal {
         
     }
 
-public static MemoriaPrincipal getInstance() {
-    if (instance == null) {
-        synchronized (MemoriaPrincipal.class) {
-            if (instance == null) {
-                instance = new MemoriaPrincipal();
+    public static MemoriaPrincipal getInstance() {
+        if (instance == null) {
+            synchronized (MemoriaPrincipal.class) {
+                if (instance == null) {
+                    instance = new MemoriaPrincipal();
+                }
             }
         }
+        return instance;
     }
-    return instance;
-}
 
-
+    public HashMap<String, int[]> getMenorEMaior() { return this.menorEmaior; }
     
     public synchronized void alocarMemoria(Processo processo, int tamanho) {
         boolean alocado = false;
@@ -50,6 +50,7 @@ public static MemoriaPrincipal getInstance() {
                 processos.add(processo);
                 alocado = true;
             }
+            
             countAlocacao+=1;
             if (alocado==false && countAlocacao==32000 && arrumado==false){
                 arrumarmemoria();
@@ -63,11 +64,41 @@ public static MemoriaPrincipal getInstance() {
 
         if (alocado==true) {      
             int[] valores = menorEmaior.get(processo.getId());
-            System.out.println("Memoria alocada para o processo "+ processo.getId() + " no espaço de " + valores[0] + "-" + valores[1]);
+            // System.out.println("Memoria alocada para o processo "+ processo.getId() + " no espaço de " + valores[0] + "-" + valores[1]);
         }
-        else{
-            System.out.println("Não foi possível alocar a memória"); 
+        else {
+            // System.out.println("Não foi possível alocar a memória"); 
         }
+    }
+
+    public synchronized boolean possivelAlocacao(int tamanho) {
+        if (tamanho > this.memoriaTotal) return false;
+        boolean alocado = false;
+        boolean arrumado = false;
+        int countAlocacao = 0;
+        int espacolivre = 0;
+        while (!alocado) {
+            if (alocacao[countAlocacao] == (byte) 0) {
+                espacolivre += 1;
+            }
+            if (alocacao[countAlocacao] == (byte) 1) {
+                espacolivre = 0;
+            }
+            if (espacolivre == tamanho) {
+                alocado = true;
+                break;
+            }
+
+            countAlocacao += 1;
+            if (alocado == false && countAlocacao == 32000 && arrumado == false) {
+                arrumarmemoria();
+                countAlocacao = 0;
+                arrumado = true;
+            }
+            if (arrumado == true && countAlocacao == 32000) break;
+        }
+
+        return alocado;
     }
     
     public synchronized  void liberarmemoria(Processo processo){
@@ -82,7 +113,7 @@ public static MemoriaPrincipal getInstance() {
 
             menorEmaior.remove(processo.getId());
             processos.remove(processo);
-            System.out.println("Memoria desalocada");
+            // System.out.println("Memoria desalocada");
             
         }
         else{
