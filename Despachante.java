@@ -64,13 +64,6 @@ class Despachante implements Runnable {
           }
         }
       }
-  
-      try {
-        TimeUnit.MILLISECONDS.sleep(50); // Simula controle periódico
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-        break;
-      }
     }
   }
 }
