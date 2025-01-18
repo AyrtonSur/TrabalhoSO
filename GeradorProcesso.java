@@ -3,6 +3,7 @@ import java.util.Deque;
 import java.util.InputMismatchException;
 import java.util.regex.Pattern;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class GeradorProcesso implements Runnable {
     private static final String MENSAGEMERRO1 = "Erro: Informe um valor positivo maior que zero.";
@@ -161,6 +162,14 @@ public class GeradorProcesso implements Runnable {
 
     @Override
     public void run() {
-        while (true) { this.processarProcessos(); }
+        while (!Thread.currentThread().isInterrupted()) {
+            this.processarProcessos();
+            try {
+                TimeUnit.MILLISECONDS.sleep(50); // Simula controle periódico
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
     }
 }

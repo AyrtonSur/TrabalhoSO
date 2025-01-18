@@ -38,29 +38,31 @@ public class CPU implements Runnable {
         notify();
     }
 
+    @Override
     public void run() {
-        while(ativo) {
-            synchronized(this) {
-                while(descritor == null && ativo) {
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        return;
-                    }
-                }
+      while (ativo) {
+        synchronized (this) {
+          while (descritor == null && ativo) {
+            try {
+              wait();
+            } catch (InterruptedException e) {
+              Thread.currentThread().interrupt();
+              return;
             }
-            if(descritor != null) {
-                try {
-                    // System.out.println("Executando processo " + descritor.getId() + " com tempo de " + quantum * 100 + " milisegundos.");
-                    TimeUnit.MILLISECONDS.sleep(this.quantum * CPU.DURACAOQUANTUMMS);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } finally {
-                    liberarCPU();
-                }
-            }
+          }
         }
+        if (descritor != null) {
+          try {
+            // System.out.println("Executando processo " + descritor.getId() + " com tempo de " + quantum * 100 + " milisegundos.");
+            TimeUnit.MILLISECONDS.sleep(this.quantum * CPU.DURACAOQUANTUMMS);
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return;
+          } finally {
+            liberarCPU();
+          }
+        }
+      }
     }
 
     private synchronized void liberarCPU() {
