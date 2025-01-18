@@ -161,6 +161,6 @@ public class GeradorProcesso implements Runnable {
 
     @Override
     public void run() {
-        while (true) { this.processarProcessos(); }
+        while (!Thread.currentThread().isInterrupted()) { this.processarProcessos(); }
     }
 }

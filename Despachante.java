@@ -16,7 +16,7 @@ class Despachante implements Runnable {
 
   @Override
   public void run() {
-    while (true) {
+    while (!Thread.currentThread().isInterrupted()) {
       Descritor descritor;
       synchronized (this.filaAuxiliar) {
         descritor = filaAuxiliar.remover();
