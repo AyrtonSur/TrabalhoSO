@@ -16,7 +16,7 @@ class Despachante implements Runnable {
 
   @Override
   public void run() {
-    while (true) {
+    while (!Thread.currentThread().isInterrupted()) {
       Descritor descritor;
       synchronized (this.filaAuxiliar) {
         descritor = filaAuxiliar.remover();
@@ -28,7 +28,6 @@ class Despachante implements Runnable {
       }
   
       if (descritor != null) {
-        // System.out.println("Descritor nao nulo.");
         Processo processo = memoriaPrincipal.getprocesso(descritor.getId());
         boolean alocado = false;
 
@@ -47,6 +46,7 @@ class Despachante implements Runnable {
             DispositivoES ES = new DispositivoES(descritor, filaAuxiliar);
             ObservadorEstados.adicionarDispositivoES(ES);
             Thread threadES = new Thread(ES);
+            threadES.setDaemon(true);
             threadES.start();
           }
         } else if (processo.getFaseAtual().equals("FaseCPU2") && processo.getTempoFaseCpu2() == 0) {
@@ -56,8 +56,6 @@ class Despachante implements Runnable {
           alocado = true;
           memoriaPrincipal.liberarmemoria(processo);
         }
-
-  
 
         while(!alocado) {
           for (CPU cpu : cpus) {
